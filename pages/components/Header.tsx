@@ -1,7 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
 import { Moon, Sun, Activity } from 'lucide-react';
-import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 
 interface HeaderProps {
@@ -18,7 +17,7 @@ export function Header({ darkMode, toggleDarkMode }: HeaderProps) {
             <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-lg font-bold">
               AK
             </div>
-            <h1 className="text-xl font-bold">Aaliya Khadija</h1>
+            {/* <h1 className="text-xl font-bold">Aaliya Khadija</h1> */}
           </div>
           <div className="flex items-center space-x-4">
             <Link href="/activity" className="flex items-center space-x-2 text-sm font-medium">
