@@ -1,23 +1,35 @@
-'use client'
+
+
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Header } from '../components/Header';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft } from 'lucide-react';
 
 type Activity = {
-    action: string;
-    timestamp: string;
-  };
-  
+  action: string;
+  timestamp: string;
+};
 
 export default function ActivityPage() {
-  
   const [activities, setActivities] = useState<Activity[]>([]);
-
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [darkMode, setDarkMode] = useState(false);
+
+  // Load dark mode state from localStorage
+  useEffect(() => {
+    const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+    setDarkMode(savedDarkMode);
+  }, []);
+
+  const toggleDarkMode = () => {
+    const newDarkModeState = !darkMode;
+    setDarkMode(newDarkModeState);
+    localStorage.setItem('darkMode', newDarkModeState.toString());
+  };
 
   useEffect(() => {
     const fetchActivities = async () => {
@@ -32,7 +44,7 @@ export default function ActivityPage() {
           const sortedActivities = data.activityLog.sort(
             (a: Activity, b: Activity) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
           );
-          
+
           setActivities(sortedActivities); // Assuming the backend response includes "activityLog"
         } else {
           throw new Error('Failed to fetch activity log');
@@ -49,16 +61,31 @@ export default function ActivityPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <Header darkMode={false} toggleDarkMode={() => {}} />
+    <div
+      className={`min-h-screen ${
+        darkMode ? 'bg-[#171717] text-white' : 'bg-gray-100 text-black'
+      }`}
+    >
+      <Header darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
       <main className="container mx-auto p-4 max-w-3xl">
         <div className="mb-6">
-          <Link href="/" className="flex items-center text-sm text-muted-foreground hover:text-foreground">
+          <Link
+            href="/"
+            className={`flex items-center text-sm ${
+              darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-black'
+            }`}
+          >
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Profile
           </Link>
         </div>
-        <Card>
+        <Card
+          className={`${
+            darkMode
+              ? 'bg-[#171717] text-white border border-gray-700'
+              : 'bg-white text-black border border-gray-300'
+          }`}
+        >
           <CardHeader>
             <CardTitle>Activity Log</CardTitle>
           </CardHeader>
@@ -70,9 +97,18 @@ export default function ActivityPage() {
             ) : activities.length > 0 ? (
               <ul className="space-y-4">
                 {activities.map((activity, index) => (
-                  <li key={index} className="border-b pb-4 last:border-b-0 last:pb-0">
+                  <li
+                    key={index}
+                    className={`pb-4 border-b last:border-b-0 last:pb-0 ${
+                      darkMode ? 'border-gray-700' : 'border-gray-300'
+                    }`}
+                  >
                     <p className="font-medium">{activity.action}</p>
-                    <p className="text-xs text-muted-foreground mt-1">
+                    <p
+                      className={`text-xs mt-1 ${
+                        darkMode ? 'text-gray-400' : 'text-gray-600'
+                      }`}
+                    >
                       {new Date(activity.timestamp).toLocaleString()}
                     </p>
                   </li>

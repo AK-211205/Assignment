@@ -1,7 +1,8 @@
+
 import React from 'react';
 import Link from 'next/link';
 import { Moon, Sun, Activity } from 'lucide-react';
-import { Switch } from "@/components/ui/switch"
+import { Switch } from "@/components/ui/switch";
 
 interface HeaderProps {
   darkMode: boolean;
@@ -30,6 +31,9 @@ export function Header({ darkMode, toggleDarkMode }: HeaderProps) {
                 checked={darkMode}
                 onCheckedChange={toggleDarkMode}
                 aria-label="Toggle dark mode"
+                className={`rounded-full p-1 ${
+                  darkMode ? 'border-2 border-gray-500' : ''
+                }`} // Add border in dark mode
               />
               <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
             </div>
@@ -39,4 +43,3 @@ export function Header({ darkMode, toggleDarkMode }: HeaderProps) {
     </header>
   );
 }
-
